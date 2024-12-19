@@ -180,6 +180,16 @@ public final class StandardJavaScriptSerializer implements IStandardJavaScriptSe
                 }
             }
 
+            final Class<?> jdk8ModuleClass =
+                    ClassLoaderUtils.findClass(jacksonPrefix + ".datatype.jdk8.Jdk8Module");
+            if (jdk8ModuleClass != null) {
+                try {
+                    this.mapper.registerModule((Module)jdk8ModuleClass.newInstance());
+                } catch (final InstantiationException | IllegalAccessException e) {
+                    throw new ConfigurationException("Exception while trying to initialize JDK8Module support for Jackson", e);
+                }
+            }
+
         }
 
 

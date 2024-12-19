@@ -20,6 +20,9 @@
 package org.thymeleaf.standard.serializer;
 
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -159,6 +162,17 @@ public class StandardJavaScriptSerializerTest {
         serializer.serializeValue(VALUE0, stringWriter);
         Assertions.assertEquals("\"<\\/script>\\u0026#22;\"", stringWriter.toString());
 
+    }
+
+    @Test
+    public void testSerializeJdk8OptionalJS() {
+        final IStandardJavaScriptSerializer serializer = new StandardJavaScriptSerializer(true);
+        final StringWriter stringWriter = new StringWriter();
+        Map<String, Optional<String>> map = new HashMap<>();
+        map.put("nonNull", Optional.of("VALUE"));
+        map.put("null", Optional.empty());
+        serializer.serializeValue(map, stringWriter);
+        Assertions.assertEquals("{\"null\":null,\"nonNull\":\"VALUE\"}", stringWriter.toString());
     }
 
 
